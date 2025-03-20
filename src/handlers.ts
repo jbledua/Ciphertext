@@ -29,6 +29,8 @@ import {
 } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
+import { sign, createSign } from "crypto";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCQJ1BjqhJVMz8e3tjCRpVljF5NXP8Rw_0",
   authDomain: "whisperlink.firebaseapp.com",
@@ -42,7 +44,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const store = getStorage(app);
-if(!import.meta.env.PROD){
+if (!import.meta.env.PROD) {
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
   connectStorageEmulator(store, "127.0.0.1", 9199);
 }
@@ -52,41 +54,41 @@ export const addChatsListener = (
   setChats: React.Dispatch<SetStateAction<chat[]>>,
   setUser: React.Dispatch<SetStateAction<user | undefined>>
 ) => {
-    void(async () => {
-      const storedUser = localStorage.getItem("user");
-      if (!user && storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        for (const key in parsedUser.keys) {
-          parsedUser.keys[key].keyPair.publicKey = await crypto.subtle.importKey(
-            "jwk",
-            JSON.parse(parsedUser.keys[key].keyPair.publicKey),
-            {
-              name: "RSA-OAEP",
-              hash: "SHA-256",
-            },
-            true,
-            ["encrypt"]
-          );
-          parsedUser.keys[key].keyPair.privateKey = await crypto.subtle.importKey(
-            "jwk",
-            JSON.parse(parsedUser.keys[key].keyPair.privateKey),
-            {
-              name: "RSA-OAEP",
-              hash: "SHA-256",
-            },
-            true,
-            ["decrypt"]
-          );
-          parsedUser.keys[key].groupKey = await crypto.subtle.importKey(
-            "raw",
-            stringToBuffer(parsedUser.keys[key].groupKey),
-            { name: "AES-GCM" },
-            true,
-            ["encrypt", "decrypt"]
-          );
-        }
-        setUser(parsedUser);
+  void (async () => {
+    const storedUser = localStorage.getItem("user");
+    if (!user && storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      for (const key in parsedUser.keys) {
+        parsedUser.keys[key].keyPair.publicKey = await crypto.subtle.importKey(
+          "jwk",
+          JSON.parse(parsedUser.keys[key].keyPair.publicKey),
+          {
+            name: "RSA-OAEP",
+            hash: "SHA-256",
+          },
+          true,
+          ["encrypt"]
+        );
+        parsedUser.keys[key].keyPair.privateKey = await crypto.subtle.importKey(
+          "jwk",
+          JSON.parse(parsedUser.keys[key].keyPair.privateKey),
+          {
+            name: "RSA-OAEP",
+            hash: "SHA-256",
+          },
+          true,
+          ["decrypt"]
+        );
+        parsedUser.keys[key].groupKey = await crypto.subtle.importKey(
+          "raw",
+          stringToBuffer(parsedUser.keys[key].groupKey),
+          { name: "AES-GCM" },
+          true,
+          ["encrypt", "decrypt"]
+        );
       }
+      setUser(parsedUser);
+    }
   })();
   const q = query(collection(db, "Chats"));
   const unsub = onSnapshot(q, (querySnapshot) => {
@@ -392,6 +394,13 @@ export const leaveChat = (chatId: string, userId: string, users: fbUser[]) => {
   })();
 };
 
+function createSignature(data: string, privateKey: string): string {
+  const sign = createSign("SHA256");
+  sign.update(data);
+  sign.end();
+  return sign.sign(privateKey, "base64");
+}
+
 export const sendMessage = (
   chatId: string,
   sender: user,
@@ -435,10 +444,14 @@ export const sendMessage = (
     }
 
     const { encryptedMessage, iv } = await encryptMessage(message, groupKey);
+
+    const signData = `${sender.userId}:${bufferToString(encryptedMessage)}:${iv}`;
+    const signature = createSignature(signData, sender.keys[chatId].keyPair.privateKey)
     const newMessage = {
       sender: { username: sender.username, userId: sender.userId },
       text: bufferToString(encryptedMessage),
       iv: bufferToString(iv),
+      signature,
       ...(fileLink && {
         file: {
           link: fileLink,
