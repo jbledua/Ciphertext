@@ -79,6 +79,26 @@ export const addChatsListener = (
           true,
           ["decrypt"]
         );
+        parsedUser.keys[key].signKeys.publicKey = await crypto.subtle.importKey(
+          "jwk",
+          JSON.parse(parsedUser.keys[key].signKeys.publicKey),
+          {
+            name: "RSA-PSS",
+            hash: "SHA-256",
+          },
+          true,
+          ["verify"]
+        );
+        parsedUser.keys[key].signKeys.privateKey = await crypto.subtle.importKey(
+          "jwk",
+          JSON.parse(parsedUser.keys[key].signKeys.privateKey),
+          {
+            name: "RSA-PSS",
+            hash: "SHA-256",
+          },
+          true,
+          ["sign"]
+        );
         parsedUser.keys[key].groupKey = await crypto.subtle.importKey(
           "raw",
           stringToBuffer(parsedUser.keys[key].groupKey),
@@ -154,14 +174,43 @@ export const addChatsListener = (
         }
       }
       for (const chat of userChats) {
-        const messages = chat.messages;
+        let messages = chat.messages;
         if (
           !user?.keys[chat.sessionId] ||
           user.keys[chat.sessionId].groupKey === "pending"
         )
           continue;
         const groupKey = user.keys[chat.sessionId].groupKey;
-        const decryptedMessages = await Promise.all(
+
+        const publicKeys: Record<string, any> = {};
+        for (const user of chat.users) {
+          publicKeys[user.userId] = await crypto.subtle.importKey(
+            "jwk",
+            JSON.parse(user.publicSignKey),
+            {
+              name: "RSA-PSS",
+              hash: "SHA-256",
+            },
+            true,
+            ["verify"]
+          );
+        };
+
+        messages = await Promise.all(
+          messages.map(async (msg) => {
+            const signData = `${msg.sender.userId}:${msg.text}:${msg.iv}`
+            console.log("Here", signData, msg.signature, publicKeys[msg.sender.userId])
+            msg.validSignature = await verifySignature(
+              signData,
+              msg.signature,
+              publicKeys[msg.sender.userId]
+            );
+            console.log("Here", msg.validSignature)
+            return msg;
+          })
+        );
+
+        let decryptedMessages = await Promise.all(
           messages.map(async (msg) => {
             msg.text = await decryptMessage(
               stringToBuffer(msg.text),
@@ -171,6 +220,7 @@ export const addChatsListener = (
             return msg;
           })
         );
+
         chat.messages = decryptedMessages;
       }
 
@@ -185,6 +235,15 @@ export const addChatsListener = (
             user.keys[key].keyPair.privateKey
           )
         );
+        const publicSign = JSON.stringify(
+          await crypto.subtle.exportKey("jwk", user.keys[key].signKeys.publicKey)
+        );
+        const privateSign = JSON.stringify(
+          await crypto.subtle.exportKey(
+            "jwk",
+            user.keys[key].signKeys.privateKey
+          )
+        );
         const groupString = bufferToString(
           await crypto.subtle.exportKey(
             "raw",
@@ -193,6 +252,7 @@ export const addChatsListener = (
         );
         stringKeys[key] = {
           keyPair: { publicKey: publicString, privateKey: privateString },
+          signKeys: { publicKey: publicSign, privateKey: privateSign },
           groupKey: groupString,
         };
       }
@@ -224,17 +284,20 @@ export const createNewChat = (
 ) => {
   void (async (chatName, setUser, setPopups, QandA, username, user?) => {
     const keypair = await generateKeyPair();
+    const signatureKeys = await generateSignatureKeys();
     const groupKey = await generateGroupKey();
     const groupEncryptedKey = await encryptGroupKey(
       groupKey,
       keypair.publicKey
     );
     const publicKey = await crypto.subtle.exportKey("jwk", keypair.publicKey);
+    const publicSignKey = await crypto.subtle.exportKey("jwk", signatureKeys.publicKey)
     const firebaseUser = {
       username: username,
       userId: user?.userId || uuidv4(),
       publicKey: JSON.stringify(publicKey),
       groupEncryptedKey: bufferToString(groupEncryptedKey),
+      publicSignKey: JSON.stringify(publicSignKey),
       role: "admin" as const,
     };
     const { question, answer } = QandA;
@@ -252,6 +315,7 @@ export const createNewChat = (
         if (prevUser) {
           prevUser.keys[chatId] = {
             keyPair: keypair,
+            signKeys: signatureKeys,
             groupKey,
           };
           return prevUser;
@@ -264,6 +328,7 @@ export const createNewChat = (
       };
       User.keys[chatId] = {
         keyPair: keypair,
+        signKeys: signatureKeys,
         groupKey,
       };
       setUser(User);
@@ -312,13 +377,16 @@ export const joinChat = (
       return;
     }
     const keyPair = await generateKeyPair();
+    const signKeys = await generateSignatureKeys();
     const publicKey = JSON.stringify(
       await crypto.subtle.exportKey("jwk", keyPair.publicKey)
     );
+    const publicSignKey = JSON.stringify(await crypto.subtle.exportKey("jwk", signKeys.publicKey));
     const firebaseUser = {
       username,
       userId: user?.userId || uuidv4(),
       publicKey: publicKey,
+      publicSignKey,
       groupEncryptedKey: "pending" as const,
       role: "user" as const,
     };
@@ -331,6 +399,7 @@ export const joinChat = (
         if (prevUser) {
           prevUser.keys[chatId] = {
             keyPair,
+            signKeys,
             groupKey: "pending",
           };
           return prevUser;
@@ -344,6 +413,7 @@ export const joinChat = (
 
       User.keys[chatId] = {
         keyPair: keyPair,
+        signKeys,
         groupKey: "pending" as const,
       };
       setUser(User);
@@ -394,11 +464,28 @@ export const leaveChat = (chatId: string, userId: string, users: fbUser[]) => {
   })();
 };
 
-function createSignature(data: string, privateKey: string): string {
-  const sign = createSign("SHA256");
-  sign.update(data);
-  sign.end();
-  return sign.sign(privateKey, "base64");
+async function createSignature(data: string, privateKey: CryptoKey) {
+  const dataBuffer = stringToBuffer(data);
+  const signature = await crypto.subtle.sign(
+    { name: "RSA-PSS", saltLength: 32 },
+    privateKey,
+    dataBuffer
+  )
+
+  return bufferToString(new Uint8Array(signature));
+}
+
+export async function verifySignature(data: string, signature: string, publicKey: CryptoKey) {
+  const dataBuffer = stringToBuffer(data);
+  const signatureBuffer = new Uint8Array(stringToBuffer(signature));
+
+  return await crypto.subtle.verify({
+    name: "RSA-PSS",
+    saltLength: 32
+  },
+    publicKey,
+    signatureBuffer,
+    dataBuffer);
 }
 
 export const sendMessage = (
@@ -445,8 +532,10 @@ export const sendMessage = (
 
     const { encryptedMessage, iv } = await encryptMessage(message, groupKey);
 
-    const signData = `${sender.userId}:${bufferToString(encryptedMessage)}:${iv}`;
-    const signature = createSignature(signData, sender.keys[chatId].keyPair.privateKey)
+    const signData = `${sender.userId}:${bufferToString(encryptedMessage)}:${bufferToString(iv)}`;
+    const signature = await createSignature(signData, sender.keys[chatId].signKeys.privateKey);
+    const test = await verifySignature(signData, signature, sender.keys[chatId].signKeys.publicKey);
+    console.log("TEST", test, signData, signature, sender.keys[chatId].signKeys.publicKey);
     const newMessage = {
       sender: { username: sender.username, userId: sender.userId },
       text: bufferToString(encryptedMessage),
@@ -617,6 +706,21 @@ export const generateKeyPair = async () => {
 
   return keyPair;
 };
+
+export const generateSignatureKeys = async () => {
+  const keyPair = await crypto.subtle.generateKey(
+    {
+      name: "RSA-PSS",
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+      hash: "SHA-256",
+    },
+    true,
+    ["sign", "verify"]
+  );
+
+  return keyPair;
+}
 
 const generateGroupKey = async () => {
   const groupKey = await crypto.subtle.generateKey(

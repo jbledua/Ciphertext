@@ -23,6 +23,10 @@
   text-align: right;
 }
 
+.invalidMessage {
+  background-color: red !important;
+}
+
 .messageContainer p {
   margin: 0;
 }

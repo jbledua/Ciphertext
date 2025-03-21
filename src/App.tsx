@@ -152,11 +152,13 @@ function App() {
             closeChat={closeChat}
           >
             {chats[openChat].messages.map((message) => {
+              console.log(message.validSignature);
               return (
                 <>
                   <Message
                     isSender={message.sender.userId === user?.userId}
                     senderName={message.sender.username}
+                    isValid={message.validSignature}
                   >
                     {message.file ? message.file?.type === "image" ?
                       (

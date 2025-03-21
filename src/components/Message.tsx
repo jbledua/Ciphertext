@@ -6,12 +6,13 @@ interface MessageProps {
   senderName: string;
   children: React.ReactNode;
   isSender?: boolean; // Make isSender optional if not all parent components will pass it
+  isValid: boolean
 }
 
-const Message = ({ children, senderName, isSender }: MessageProps) => {
+const Message = ({ children, senderName, isSender, isValid }: MessageProps) => {
   return (
     <div className={styles.messageContainer}>
-      <div className={isSender ? styles.sentMessage : styles.receivedMessage}>
+      <div className={(isSender ? styles.sentMessage : styles.receivedMessage) + " " + (!isValid ? styles.invalidMessage : "")}>
         <div className={styles.senderName}>{senderName}</div>
         {children}
       </div>
