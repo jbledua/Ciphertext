@@ -22,9 +22,6 @@ interface Props {
   }) => void;
 }
 
-
-
-
 const Chat = ({ user, children, chatId, showLink, chats, openChat, setOpenChat, closeChat, setPopups }: Props) => {
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
