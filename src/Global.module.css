@@ -1,4 +1,6 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap');
+
 
 html, body {
   display: block;
@@ -10,6 +12,10 @@ html, body {
   font-size: 15px;
   font-weight: 400;
   box-sizing: border-box;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); /* Starry gradient */
+  color: #E0E0E0; /* Light gray text for contrast */
+  line-height: 1.5; /* Improved readability */
+  overflow: hidden; /* Prevent scrollbars */
 }
 
 #root {
@@ -19,4 +25,32 @@ html, body {
   max-height: 100%;
   min-width: 100%;
   max-width: 100%;
+  background-color: transparent; /* Keep the starry background visible */
 }
+/* Optional: Subtle link styling */
+a {
+  color: #BB86FC; /* Soft purple links */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #3700B3; /* Darker shade on hover */
+}
+
+/* Title Styling (Optional) */
+#title {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 300;
+  font-size: 50px;
+  letter-spacing: 10px;
+  margin-top: -60px;
+  padding-left: 10px;
+}
+

@@ -1,17 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap');
 
+
 .textContainer {
-    font-size: 20px; /* Increase the font size */
-    padding: 15px 30px; /* Increase padding to make button larger */
-    margin: 5px; /* Adjust as needed */
-    color: black;
-    background-color: beige;
-    justify-content: center; /* Center items horizontally */
-    cursor: pointer;
-    border-radius: 10px; /* Adjust the value to change the roundness */
-    text-align: center;
-    font-family: 'Oswald', sans-serif;
-    box-shadow: 1px 3px 6px black;
-    text-decoration: none;
-    display: inline-block;
-  }
+  font-size: 20px; /* Increase the font size */
+  padding: 15px 30px; /* Increase padding to make button larger */
+  margin: 5px; /* Adjust as needed */
+  color: #E0E0E0; /* Light gray text for contrast */
+  background-color: #333333; /* Dark background */
+  justify-content: center; /* Center items horizontally */
+  cursor: pointer;
+  border-radius: 10px; /* Adjust the value to change the roundness */
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.textContainer:hover {
+  background-color: #444444; /* Slightly lighter background on hover */
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.textContainer:active {
+  background-color: #555555; /* Darker background when clicked */
+  transform: translateY(0); /* Remove hover lift */
+}
+

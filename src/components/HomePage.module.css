@@ -5,36 +5,35 @@ body, #root {
   margin: 0;
   padding: 0;
   font-family: 'Oswald', sans-serif;
-  justify-content: center; /* Center items horizontally */
-  text-align: center; /* Center text inside the container */
-  background-image: url('../../Assets/Main Background.png'); /* Adjust the path based on your project structure */
+  justify-content: center;
+  text-align: center;
+  background-color: #121212; /* Dark background color for the entire body */
+  color: #f0f0f0; /* Light text color for contrast */
 }
 
-.imageContainer
-{
+/* Full-screen background container */
+.imageContainer {
   height: 100%;
   width: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 500px;
 }
 
+/* Main message style */
 .message {
   font-size: 60px;
   font-weight: bold;
   font-family: 'Oswald', sans-serif;
   text-shadow: 2px 2px 4px rgb(88, 184, 243);
   text-transform: uppercase;
-  animation: pulse 2s ease-in-out infinite alternate,    glow 2s ease-in-out infinite alternate;
-  padding: "10px 20px";
-  color: beige;
-  -webkit-animation: pulse 2s ease-in-out infinite alternate,    glow 2s ease-in-out infinite alternate;
+  padding: 10px 20px;
+  color: #f0f0f0; /* Light text color for better visibility */
+  -webkit-animation: pulse 2s ease-in-out infinite alternate, glow 2s ease-in-out infinite alternate;
 }
 
+/* Title container centered on the screen */
 .titleContainer {
   display: flex;
   flex-direction: column;
-  height:max-content;
+  height: max-content;
   width: max-content;
   gap: 40px;
   margin: 0;
@@ -49,12 +48,13 @@ body, #root {
   -o-transform: translate(-50%, -60%);
 }
 
+/* Underline effect for the message */
 .message::after {
   content: "";
   display: block;
   width: 425px;
   height: 4px;
-  background-color: beige;
+  background-color: #f0f0f0; /* Light color for the underline */
   margin: 10px auto;
   border-radius: 2px;
   transition: width 0.4s ease-in-out;
@@ -64,15 +64,16 @@ body, #root {
   -o-border-radius: 2px;
 }
 
+/* Button container with centered buttons */
 .buttonContainer {
   display: flex;
-  justify-content: center; /* Adjust this as needed */
-  gap: 40px; /* Adjust the space between the buttons */
-  justify-content: center; /* Center items horizontally */
-  text-align: center; /* Center text inside the container */
+  justify-content: center;
+  gap: 40px;
+  justify-content: center;
+  text-align: center;
 }
 
-/* Animation for pulsating effect */
+/* Pulsating animation */
 @keyframes pulse {
   0% {
     transform: scale(0.95);
@@ -89,15 +90,16 @@ body, #root {
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
     -ms-transform: scale(1.1);
-}
+  }
 }
 
-/* Animation for glowing effect */
+/* Glowing animation */
 @keyframes glow {
   0% {
-    text-shadow: 4px 4px 6px black;
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8), 0 0 25px #00baff, 0 0 50px #00baff;
   }
   100% {
-    text-shadow: 4px 4px 6px black;
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8), 0 0 25px #00baff, 0 0 50px #00baff;
   }
 }
+

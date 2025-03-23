@@ -1,40 +1,60 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap');
 
 .textSet {
-  font-size: 20px; /* Increase the font size */
-  padding: 15px 30px; /* Increase padding to make button larger */
+  font-size: 24px; /* Slightly larger text for better readability */
+  padding: 20px 40px; /* More substantial button size */
   text-transform: uppercase;
-  margin: 5px; /* Adjust as needed */
-  color: #2c046d;
+  margin: 10px; /* Increase margin for better spacing */
+  color: #BB86FC; /* Soft purple text for contrast */
   font-family: 'Oswald', sans-serif;
-  background-color: beige;
+  background-color: #2A2A2A; /* Slightly darker background */
   justify-content: center; /* Center items horizontally */
-  padding: '10px 20px';
-  border-radius: '5px';
-  cursor: 'pointer';
+  cursor: pointer;
+  border-radius: 12px; /* Smoother rounded corners */
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.textSet:hover {
+  background-color: #3A3A3A; /* Slightly lighter background on hover */
+  transform: translateY(-3px); /* More noticeable lift effect */
+}
+
+.textSet:active {
+  background-color: #4A4A4A; /* Darker background when clicked */
+  transform: translateY(0); /* Remove hover lift */
 }
 
 .popupForm {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 50px; /* Increased spacing between form elements */
   text-align: left;
+  background-color: #181818; /* Darker form background */
+  padding: 25px; /* Slightly more padding */
+  border-radius: 12px; /* Slightly softer corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
 }
 
 .formField {
   display: flex;
   flex-direction: column;
+  color: #E0E0E0; /* Light gray text for readability */
+  font-size: 18px; /* Slightly larger text */
 }
 
 .hidden {
-  display: none
+  display: none;
 }
 
 .responsiveImage {
-  max-width: 60vw;  /* Limits width to 60% of viewport width */
-  max-height: 40vh; /* Limits height to 40% of viewport height */
+  max-width: 70vw;  /* Increased width limit */
+  max-height: 50vh; /* Increased height limit */
   height: auto;     /* Keeps aspect ratio */
   width: auto;      /* Keeps aspect ratio */
   object-fit: contain;
-  border-radius: 10px; /* Optional: Slightly rounded corners */
+  border-radius: 12px; /* More rounded corners */
+  background-color: #222222; /* Dark background to blend in */
 }
+

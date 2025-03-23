@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap');
 
 .chatContainer {
@@ -5,85 +6,87 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevents overflow issues */
+  overflow: hidden;
+  background-color: #121212; /* Dark background for the container */
 }
 
 /* Fixed Chat Navbar at the Top */
 .chatNavBar {
   display: flex;
-  background-color: #596062;
-  border-bottom: 1px solid #000000;
+  background-color: #1e1e1e; /* Darker background for navbar */
+  border-bottom: 1px solid #333333; /* Subtle border */
   font-family: 'Oswald', sans-serif;
   align-items: center;
-  padding: 2px 0;
+  padding: 8px 20px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  flex-wrap: nowrap; /* Ensure items stay on a single line */
+  flex-wrap: nowrap;
 }
 
-/*.textContainer is for .chatNavBar buttons*/ 
+/*.textContainer is for .chatNavBar buttons*/
 .textContainer {
-  background-color: #ffffff; 
-  width: auto;
-  color: #000000; 
-  padding: 5px 15px; 
-  margin-right: 3px; /* Adds some space between the buttons */
-  margin-left: 3px; /* Adds some space between the buttons */
-  border: none; /* Removes the border */
+  background-color: #333333; /* Dark background for buttons */
+  color: #ffffff; /* Light text color for contrast */
+  padding: 8px 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+  border: none;
   font-family: 'Oswald', sans-serif;
-  border-radius: 7px; /* Rounds the corners of the buttons */
-  cursor: pointer; /* Changes cursor to pointer on hover */
-  font-size: 16px; /* Sets a standard font size */
-  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
 }
 
 .textContainer:hover {
-  background-color: #074aa7; /* Changes background on hover */
+  background-color: #444444; /* Slightly lighter on hover */
+  transform: scale(1.05); /* Subtle scale effect on hover */
 }
 
 .textContainer.active {
-  background-color: #434343; /* Darker grey to highlight active chat */
-  color: white; /* Changes text color to white for contrast */
-  font-weight: bold; /* Makes the active tab text bolder */
-}
-  
-/* Scrollable Chat Message Body */
-.textBodyContainer {
-  flex: 1; /* Takes up all available space */
-  overflow-y: auto; /* Only this div is scrollable */
-  padding: 5px;
-  background-image: url('../../Assets/Chat Background.jpg');
-  background-position: center;
-  border-left: 1px solid #393939;
-  border-right: 1px solid #393939;
-  border-top: 2px solid #393939;
-  border-bottom: 4px solid #393939;
-  margin-top: 50px; /* Space for fixed navbar */
-  margin-bottom: 60px; /* Space for fixed input box */
+  background-color: #575757; /* Darker grey for active state */
+  color: #ffffff;
+  font-weight: bold;
 }
 
+/* Scrollable Chat Message Body */
+.textBodyContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #181818; /* Dark background for chat body */
+  border-left: 1px solid #2c2c2c;
+  border-right: 1px solid #2c2c2c;
+  border-top: 2px solid #2c2c2c;
+  border-bottom: 4px solid #2c2c2c;
+  margin-top: 70px; /* Adjusted for fixed navbar height */
+  margin-bottom: 80px; /* Adjusted for fixed input box height */
+  color: #ddd; /* Light text color */
+}
+
+/* Close and Add Buttons */
 .closeTextContainer, .addTextContainer {
-  padding: 5px 10px;
+  padding: 8px 20px;
   margin: 5px;
-  background-color: #ffffff;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 10px;
+  background-color: #444444;
+  color: #ffffff;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  transition: background-color 0.3s;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .closeTextContainer:hover {
-  background-color: #ed7070;
+  background-color: #e04d4d; /* Red color on hover for close */
 }
 
 .addTextContainer:hover {
-  background-color: #70e98c;
+  background-color: #4cd19d; /* Green color on hover for add */
 }
 
 /* Fixed Chatbox at the Bottom */
@@ -91,54 +94,65 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Ensure input and buttons are spaced evenly */
-  border-top: 1px solid #000000;
+  justify-content: space-between;
+  border-top: 1px solid #333333; /* Dark border for bottom */
   padding: 10px;
-  background: #596062;
+  background: #1e1e1e; /* Dark background */
   position: fixed;
   bottom: 0;
   left: 0;
   z-index: 1000;
-  flex-wrap: nowrap; /* Ensure elements stay in a single line */
   gap: 10px;
 }
 
 /* Chat Input Box */
 .inputText, ::placeholder {
   flex-grow: 1;
-  background: #383f40;
-  color: #bcbcbc;
-  padding: 10px;
+  background: #292929; /* Dark input box */
+  color: #bbb; /* Light text */
+  padding: 12px 16px;
   font-size: 16px;
   border: none;
   border-radius: 7px;
   outline: none;
   min-width: 0;
   max-width: 100%;
+  transition: background 0.3s ease; /* Smooth background transition */
 }
 
+.inputText:focus {
+  background-color: #333333; /* Slightly lighter when focused */
+}
+
+/* Hidden File Input */
 .fileInput {
-  display: none; /* Hidden file input */
+  display: none;
 }
 
 /* Style for the Icon Button */
 .iconButtonContainer {
   display: flex;
-  gap: 5px; /* Adds spacing between buttons */
-  flex-wrap: nowrap; /* Ensure buttons remain on one line */
-  margin-right: 20px;
+  gap: 10px;
+  flex-wrap: nowrap;
 }
 
 .iconButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #383f40;
-  padding: 8px 12px;
+  color: #bbb; /* Light color for icons */
+  padding: 10px 15px;
   background: none;
-  border: 1px solid;
+  border: 1px solid #444444;
   border-radius: 7px;
   cursor: pointer;
   font-size: 20px;
   min-width: 40px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+.iconButton:hover {
+  background: #444444; /* Dark background on hover */
+  color: #ffffff; /* Light color when hovered */
+}
+
