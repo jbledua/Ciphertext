@@ -1,131 +1,155 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap');
 
 .chatContainer {
-  width: 100vw;
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevents overflow issues */
+  width: 100vw;
+  height: 100vh;
+  background-color: #121212;
+  overflow: hidden;
 }
 
-/* Fixed Chat Navbar at the Top */
-.chatNavBar {
+.navAndBodyWrapper {
   display: flex;
-  background-color: #596062;
-  border-bottom: 1px solid #000000;
-  font-family: 'Oswald', sans-serif;
-  align-items: center;
-  padding: 2px 0;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  flex-wrap: nowrap; /* Ensure items stay on a single line */
+  flex-direction: row;
+  flex: 1;
+  overflow: hidden;
 }
 
-/*.textContainer is for .chatNavBar buttons*/ 
-.textContainer {
-  background-color: #ffffff; 
-  width: auto;
-  color: #000000; 
-  padding: 5px 15px; 
-  margin-right: 3px; /* Adds some space between the buttons */
-  margin-left: 3px; /* Adds some space between the buttons */
-  border: none; /* Removes the border */
+.chatNavBar {
+  width: 240px;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+  padding: 10px;
   font-family: 'Oswald', sans-serif;
-  border-radius: 7px; /* Rounds the corners of the buttons */
-  cursor: pointer; /* Changes cursor to pointer on hover */
-  font-size: 16px; /* Sets a standard font size */
-  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  border-right: 1px solid #000000;
+  z-index: 1000;
+}
+
+.textContainer {
+  background-color: #333333;
+  color: #ffffff;
+  padding: 0 12px;
+  width: 95%;
+  min-height: 50px;
+  margin: 8px 0;
+  font-family: 'Oswald', sans-serif;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.textContainer span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  min-width: 0;
+}
+
+.textBodyContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #181818;
+  border-left: 1px solid #2c2c2c;
+  border-right: 1px solid #2c2c2c;
+  border-top: 2px solid #2c2c2c;
+  border-bottom: 4px solid #2c2c2c;
+  color: #ddd;
 }
 
 .textContainer:hover {
-  background-color: #074aa7; /* Changes background on hover */
+  background-color: #444444;
+  transform: scale(1.05);
 }
 
 .textContainer.active {
-  background-color: #434343; /* Darker grey to highlight active chat */
-  color: white; /* Changes text color to white for contrast */
-  font-weight: bold; /* Makes the active tab text bolder */
-}
-  
-/* Scrollable Chat Message Body */
-.textBodyContainer {
-  flex: 1; /* Takes up all available space */
-  overflow-y: auto; /* Only this div is scrollable */
-  padding: 5px;
-  background-image: url('../../Assets/Chat Background.jpg');
-  background-position: center;
-  border-left: 1px solid #393939;
-  border-right: 1px solid #393939;
-  border-top: 2px solid #393939;
-  border-bottom: 4px solid #393939;
-  margin-top: 50px; /* Space for fixed navbar */
-  margin-bottom: 60px; /* Space for fixed input box */
+  background-color: #575757;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 .closeTextContainer, .addTextContainer {
-  padding: 5px 10px;
-  margin: 5px;
-  background-color: #ffffff;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  background-color: #444444;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  font-size: 18px;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+  border: none;
+  padding: 0;
 }
 
 .closeTextContainer:hover {
-  background-color: #ed7070;
+  background-color: #e04d4d;
 }
 
 .addTextContainer:hover {
-  background-color: #70e98c;
+  background-color: #4cd19d;
 }
 
-/* Fixed Chatbox at the Bottom */
 .chatboxContainer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Ensure input and buttons are spaced evenly */
-  border-top: 1px solid #000000;
-  padding: 10px;
-  background: #596062;
   position: fixed;
   bottom: 0;
-  left: 0;
+  width: calc(100% - 240px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #333333;
+  padding: 10px;
+  background: #1e1e1e;
+  border-left: 1px solid #333333;
+  position: fixed;
+  left: 240px;
   z-index: 1000;
-  flex-wrap: nowrap; /* Ensure elements stay in a single line */
+  flex-wrap: nowrap;
   gap: 10px;
 }
 
-/* Chat Input Box */
 .inputText, ::placeholder {
   flex-grow: 1;
-  background: #383f40;
-  color: #bcbcbc;
-  padding: 10px;
+  background: #292929;
+  color: #bbb;
+  padding: 12px 16px;
   font-size: 16px;
   border: none;
   border-radius: 7px;
   outline: none;
   min-width: 0;
   max-width: 100%;
+  transition: background 0.3s ease;
+}
+
+.inputText:focus {
+  background-color: #292929;
 }
 
 .fileInput {
-  display: none; /* Hidden file input */
+  display: none;
 }
 
-/* Style for the Icon Button */
 .iconButtonContainer {
   display: flex;
-  gap: 5px; /* Adds spacing between buttons */
-  flex-wrap: nowrap; /* Ensure buttons remain on one line */
+  gap: 5px;
+  flex-wrap: nowrap;
   margin-right: 20px;
 }
 
@@ -133,12 +157,96 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #383f40;
-  padding: 8px 12px;
+  color: #bbb;
+  padding: 10px 15px;
   background: none;
-  border: 1px solid;
+  border: 1px solid #444444;
   border-radius: 7px;
   cursor: pointer;
   font-size: 20px;
   min-width: 40px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+.iconButton:hover {
+  background: #444444;
+  color: #ffffff;
+}
+
+@media (max-width: 768px), (orientation: portrait) {
+  .chatContainer {
+    flex-direction: column;
+  }
+
+  .navAndBodyWrapper {
+    flex-direction: column;
+  }
+
+  .chatNavBar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chatNavBar {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #000000;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 10px;
+    gap: 8px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .textContainer {
+    display: inline-flex; /* key fix: prevents full-width stretch */
+    align-items: center;
+    flex-shrink: 0;
+    width: 160px;
+    max-width: 160px;
+    padding: 6px 12px;
+    margin: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .textContainer span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .chatboxContainer {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-left: none;
+  }
+
+  .textBodyContainer {
+    margin-top: 0px;
+  }
+
+  .closeTextContainer{
+    display: inline-flex;
+  }
+
+  .addTextContainer {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    margin: 4px;
+  }
+}
+

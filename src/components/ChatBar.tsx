@@ -27,25 +27,24 @@ const ChatBar = ({
   return (
     <div>
       {chats.map((chat, index) => (
-        <button
+        <div
           key={index}
-          className={`${Styles.textContainer} ${openChat === index ? Styles.active : ""
-            }`}
+          className={`${Styles.textContainer} ${openChat === index ? Styles.active : ""}`}
           onClick={() => setOpenChat(index)}
         >
-          {chat.chatName}
-          <button
+          <span>{chat.chatName}</span>
+          <div
             className={Styles.closeTextContainer}
             onClick={(e) => {
-              e.stopPropagation();
+              e.stopPropagation(); 
               leaveChat(index);
             }}
-            type="button"
-            aria-label="close"
+            role="button"
+            aria-label="Close"
           >
             <FontAwesomeIcon icon={faTimes} />
-          </button>
-        </button>
+          </div>
+        </div>
       ))}
       <button
         className={Styles.addTextContainer}

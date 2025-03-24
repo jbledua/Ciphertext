@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import Chatbox from "./Chatbox";
 import { user } from "../types";
-import ChatBar from "./ChatBar"
-import Styles from "./Chat.module.css"
+import ChatBar from "./ChatBar";
+import Styles from "./Chat.module.css";
 import "../Global.module.css";
 
 interface Props {
@@ -22,9 +22,6 @@ interface Props {
   }) => void;
 }
 
-
-
-
 const Chat = ({ user, children, chatId, showLink, chats, openChat, setOpenChat, closeChat, setPopups }: Props) => {
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
@@ -38,14 +35,24 @@ const Chat = ({ user, children, chatId, showLink, chats, openChat, setOpenChat, 
 
   return (
     <div className={Styles.chatContainer}>
-      <div className={Styles.chatNavBar}>
-        <ChatBar chats={chats} openChat={openChat} setOpenChat={setOpenChat} leaveChat={closeChat} setPopups={setPopups} />
+      <div className={Styles.navAndBodyWrapper}>
+        <div className={Styles.chatNavBar}>
+          <ChatBar
+            chats={chats}
+            openChat={openChat}
+            setOpenChat={setOpenChat}
+            leaveChat={closeChat}
+            setPopups={setPopups}
+          />
+        </div>
+        <div className={Styles.textBodyContainer}>
+          {children}
+          <div ref={endOfMessagesRef}></div>
+        </div>
       </div>
-      <div className={Styles.textBodyContainer}>
-        {children}
-        <div ref={endOfMessagesRef}></div>
+      <div className={Styles.chatboxContainer}>
+        <Chatbox user={user} chatId={chatId} showLink={showLink} />
       </div>
-      <Chatbox user={user} chatId={chatId} showLink={showLink} />
     </div>
   );
 };
