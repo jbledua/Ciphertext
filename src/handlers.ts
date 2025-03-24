@@ -199,13 +199,11 @@ export const addChatsListener = (
         messages = await Promise.all(
           messages.map(async (msg) => {
             const signData = `${msg.sender.userId}:${msg.text}:${msg.iv}`
-            console.log("Here", signData, msg.signature, publicKeys[msg.sender.userId])
             msg.validSignature = await verifySignature(
               signData,
               msg.signature,
               publicKeys[msg.sender.userId]
             );
-            console.log("Here", msg.validSignature)
             return msg;
           })
         );
@@ -535,7 +533,6 @@ export const sendMessage = (
     const signData = `${sender.userId}:${bufferToString(encryptedMessage)}:${bufferToString(iv)}`;
     const signature = await createSignature(signData, sender.keys[chatId].signKeys.privateKey);
     const test = await verifySignature(signData, signature, sender.keys[chatId].signKeys.publicKey);
-    console.log("TEST", test, signData, signature, sender.keys[chatId].signKeys.publicKey);
     const newMessage = {
       sender: { username: sender.username, userId: sender.userId },
       text: bufferToString(encryptedMessage),

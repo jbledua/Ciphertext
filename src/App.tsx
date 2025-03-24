@@ -152,7 +152,6 @@ function App() {
             closeChat={closeChat}
           >
             {chats[openChat].messages.map((message) => {
-              console.log(message.validSignature);
               return (
                 <>
                   <Message
