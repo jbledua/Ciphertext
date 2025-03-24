@@ -32,13 +32,13 @@ import { v4 as uuidv4 } from "uuid";
 import { sign, createSign } from "crypto";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCQJ1BjqhJVMz8e3tjCRpVljF5NXP8Rw_0",
-  authDomain: "whisperlink.firebaseapp.com",
-  projectId: "whisperlink",
-  storageBucket: "whisperlink.appspot.com",
-  messagingSenderId: "1003772013353",
-  appId: "1:1003772013353:web:ccb03dc280854d2f156538",
-  measurementId: "G-ZXS5MQRL5W",
+  apiKey: "AIzaSyCT0WmQU8nkQUWf_eTLWqIGQoCNHr7zTEw",
+  authDomain: "project-ciphertext.firebaseapp.com",
+  projectId: "project-ciphertext",
+  storageBucket: "project-ciphertext.firebasestorage.app",
+  messagingSenderId: "333346008755",
+  appId: "1:333346008755:web:227f10d583c87b80e1cac6",
+  measurementId: "G-S0GG79X1F8"
 };
 
 const app = initializeApp(firebaseConfig);
