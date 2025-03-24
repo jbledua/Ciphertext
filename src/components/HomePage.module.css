@@ -51,13 +51,20 @@ body, #root {
   -o-transform: translate(-50%, -60%);
 }
 
-/* Button container with centered buttons */
 .buttonContainer {
   display: flex;
+  flex-direction: column; /* Stack vertically by default (mobile-first) */
   justify-content: center;
-  gap: 40px;
-  justify-content: center;
+  align-items: center;
+  gap: 20px;
   text-align: center;
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .buttonContainer {
+    flex-direction: row; /* Buttons side by side on desktop */
+  }
 }
 
 /* Pulsating animation */
